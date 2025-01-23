@@ -2,6 +2,8 @@ import { PrismaClient, User } from "@prisma/client";
 import bcypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+// Alta cohexion bajo acoplamiento
+
 const prisma = new PrismaClient()
 const token_password = process.env.TOKEN_PASSWORD || 'pass'
 export class AuthService{
@@ -54,4 +56,5 @@ export class AuthService{
             // Devolver el token 
             return token
     }
+   
 }
