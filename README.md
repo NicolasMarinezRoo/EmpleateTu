@@ -6,4 +6,12 @@ npx tsx --init
 npm i express
 npm i --D @types/express
 npm i -D @swc/core @swc/cli
+
+npm i prisma @prisma/client
+
+npm i bcrypt
+npm i -D @types/bcrypt
+
+npm i jsonwebtoken
+npm i -D @types/jsonwebtoken
 ```
