@@ -11,4 +11,6 @@ router.get('/profile', isAuthenticate, UserController.profile)
 // A este endpoint solo se puede acceder si el usuario es administrador
 // Crer rutas, servicios, controllers, middlewares y modelos necesarios
 
+
+
 export default router

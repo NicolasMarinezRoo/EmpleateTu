@@ -17,6 +17,12 @@ export class AuthController {
             const userData = req.body
             // Validar el body
             const token = await AuthService.login(userData.email, userData.password)
+            res.cookie('token', token, { 
+                maxAge: 60 * 60 * 1000,  //1 hora de caducidad
+                httpOnly: true,  //No se puede acceder mediante js
+                secure: false,  //Solo funciona en https
+                sameSite: 'strict' //Solo se envia si es una peticion del mismo sitio
+            })
             res.status(201).json({ message: 'Login successfully: ', token })
         } catch (error) {
             res.status(409).json({ message: 'Fallo al loguearse al usuario' })

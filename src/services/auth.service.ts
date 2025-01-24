@@ -34,11 +34,10 @@ export class AuthService{
 
     static async login(email:string, password:string) {
             // Ver si el ususario existe
-    
-            const findUser = await prisma.user.findUnique({where:{email}})
 
+
+            const findUser = await prisma.user.findUnique({where:{email}})
             if(!findUser) throw new Error('Invalid user or password')
-    
     
             // Ver si el password coincide
     
