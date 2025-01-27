@@ -9,11 +9,24 @@ export function isAuthenticate(req: Request, res: Response, next: NextFunction):
     const token = req.cookies.token
     if (!token) return res.status(401).json({ message: "Access denied" })
 
-    
-
     try {
         const tokenDecodificado = jwt.verify(token, token_password)
         req.body.user = tokenDecodificado
+        next()
+    } catch (error) {
+        res.status(403).json({ message: "Invalid token" })
+    }
+}
+
+export function isAdmin(req: Request, res: Response, next: NextFunction):any {
+
+    //const token = req.headers.authorization?.split(' ')[1]
+    const token = req.cookies.token
+
+    try {
+        const {role} = jwt.decode(token) as jwt.JwtPayload || ''
+        console.log(role)
+        if(role != 'admin') res.status(403).json({ message: "Invalid role" })
         next()
     } catch (error) {
         res.status(403).json({ message: "Invalid token" })
