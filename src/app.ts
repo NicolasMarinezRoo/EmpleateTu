@@ -5,9 +5,15 @@ import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import compression from "compression";
 import cookieParser from 'cookie-parser'
+import cors from 'cors'
 
 const app = express()
 app.use(express.json())
+app.use(cors({
+    origin: 'http://localhost:5173',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
+}))
 
 app.use(cookieParser())
 
