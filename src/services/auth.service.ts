@@ -1,7 +1,7 @@
 import { PrismaClient, User } from "@prisma/client";
 import bcypt from "bcrypt";
 import jwt from "jsonwebtoken";
-
+import {HttpException} from "../exceptions/HttpException";
 // Alta cohexion bajo acoplamiento
 
 const prisma = new PrismaClient()
@@ -10,10 +10,9 @@ export class AuthService{
     static async register(user:User){
         // Ver si el usuario no existe 
         // Sentencia sql normal :'select * from users where email = user.email'
-        const findUser = await prisma.user.findUnique({where:{email: user.email
-            }})
+        const findUser = await prisma.user.findUnique({where:{email: user.email }})
 
-        if(findUser) throw new Error(`User ${user.email} alredy exists`)
+        if(findUser) throw new HttpException(409, 'User already exists')
 
         // Encriptar el password
         const passwordEncrypted = await bcypt.hash(user.password, 10)        
@@ -37,12 +36,12 @@ export class AuthService{
 
 
             const findUser = await prisma.user.findUnique({where:{email}})
-            if(!findUser) throw new Error('Invalid user or password')
+            if(!findUser) throw new HttpException(409 ,'Invalid user or password')
     
             // Ver si el password coincide
     
             const isPasswordCorrect = await bcypt.compare(password, findUser.password)      
-            if(!isPasswordCorrect) throw new Error('Invalid user or password')
+            if(!isPasswordCorrect) throw new HttpException( 404 ,'Invalid user or password')
 
             // Generar el token de autenticacion
 

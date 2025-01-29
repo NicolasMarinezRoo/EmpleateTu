@@ -1,5 +1,5 @@
 import { UserService } from "../services/user.service";
-import { Response, Request } from 'express';
+import { Response, Request, NextFunction } from 'express';
 
 export class UserController {
     static async profile(req: Request, res: Response) {
@@ -8,13 +8,13 @@ export class UserController {
         res.status(200).json(user)
 
     }
-    static async getAll(req: Request, res: Response) {
+    static async getAll(req: Request, res: Response, next: NextFunction) {
         try{
             const user = await UserService.getAll()
             res.status(200).json(user)
             
         }catch(error){
-            res.status(404).json({message: 'No se encontraron usuarios'})
+            next(error)
         }
 
     }
