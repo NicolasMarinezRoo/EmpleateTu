@@ -19,14 +19,9 @@ export function isAuthenticate(req: Request, res: Response, next: NextFunction):
 }
 
 export function isAdmin(req: Request, res: Response, next: NextFunction):any {
-
-    //const token = req.headers.authorization?.split(' ')[1]
-    const token = req.cookies.token
-
+    const {role} = req.body.user
     try {
-        const {role} = jwt.decode(token) as jwt.JwtPayload || ''
-        console.log(role)
-        if(role != 'admin') res.status(403).json({ message: "Invalid role" })
+        if(role != 'admin') res.status(403).json({ message: "Acces denied" })
         next()
     } catch (error) {
         res.status(403).json({ message: "Invalid token" })
