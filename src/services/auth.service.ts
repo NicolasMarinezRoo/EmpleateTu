@@ -1,7 +1,7 @@
 import { PrismaClient, User } from "@prisma/client";
 import bcypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import {HttpException} from "../exceptions/HttpException";
+import {HttpException} from "../exceptions/HttpException2";
 // Alta cohexion bajo acoplamiento
 
 const prisma = new PrismaClient()

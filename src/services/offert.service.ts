@@ -1,4 +1,4 @@
-import { HttpException } from "../exceptions/HttpException";
+import { HttpException } from "../exceptions/HttpException2";
 import { PrismaClient, Offert} from "@prisma/client";
 
 
