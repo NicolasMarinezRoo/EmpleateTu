@@ -1,6 +1,6 @@
-import { PrismaClient, Offert, User } from "@prisma/client";
-
 import { HttpException } from "../exceptions/HttpException";
+import { PrismaClient, Offert} from "@prisma/client";
+
 
 const prisma = new PrismaClient()
 
