@@ -61,7 +61,7 @@ export class OffertController {
     static async rate(req: Request, res: Response, next: NextFunction) {
         
         const rate = req.body.rate.value
-        const user = req.body.user.id
+        const user = req.cookies.token.id
 
         try {
             const id = Number(req.params.id)

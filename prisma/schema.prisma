@@ -74,3 +74,4 @@ model Rate {
 
   @@id([idUser, idOffert])
 }
+
