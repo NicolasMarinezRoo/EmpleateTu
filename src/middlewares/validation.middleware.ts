@@ -1,5 +1,4 @@
-import { HttpException } from '@/exceptions/HttpException';
-import { error } from 'console';
+
 import { Response, Request, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
 
