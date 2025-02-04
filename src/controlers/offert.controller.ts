@@ -4,7 +4,7 @@ import { OffertService } from '../services/offert.service';
 export class OffertController {
     static async getById(req: Request, res: Response, next:NextFunction) {
         try {
-            const id = Number(req.params.id)
+            const id = Number.parseInt(req.params.id)
             const offert = await OffertService.getById(id)
             res.status(200).json(offert)
             
@@ -27,8 +27,9 @@ export class OffertController {
     static async create(req: Request, res: Response, next: NextFunction) {
         
         const offertData = req.body
+        const user = req.cookies.token.id
         try {
-            const newOffert = await OffertService.create(offertData)
+            const newOffert = await OffertService.create(user, offertData)
             res.status(201).json(newOffert)
         } catch (error) {
             next(error)
@@ -38,8 +39,9 @@ export class OffertController {
 
     static async update(req: Request, res: Response, next: NextFunction) {
         try {
-            const id = Number(req.params.id)
-            const offert = await OffertService.update(id)
+            const offertData = req.body
+            const id = Number.parseInt(req.params.id)
+            const offert = await OffertService.update(id, offertData)
             res.status(200).json(offert)
             
         } catch (error) {
@@ -49,7 +51,7 @@ export class OffertController {
 
     static async delete(req: Request, res: Response, next: NextFunction) {
         try {
-            const id = Number(req.params.id)
+            const id = Number.parseInt(req.params.id)
             const offert = await OffertService.delete(id)
             res.status(200).json(offert)
             
@@ -60,13 +62,13 @@ export class OffertController {
 
     static async rate(req: Request, res: Response, next: NextFunction) {
         
-        const rate = req.body.rate.value
+        const rate = req.body.value
         const user = req.cookies.token.id
 
         try {
-            const id = Number(req.params.id)
-            const offert = await OffertService.rate(id, rate, user)
-            res.status(200).json(offert)
+            const id = Number.parseInt(req.params.id)
+            await OffertService.rate(id, rate, user)
+            res.status(200).json({message: 'Rate added'})
             
         } catch (error) {
             next(error)
@@ -75,7 +77,7 @@ export class OffertController {
 
     static async getRate(req: Request, res: Response, next: NextFunction) {
         try {
-            const id = Number(req.params.id)
+            const id = Number.parseInt(req.params.id)
             const offert = await OffertService.getRate(id)
             res.status(200).json(offert)
             
