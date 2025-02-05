@@ -1,8 +1,8 @@
-import { HttpException } from "../exceptions/HttpException2";
-import { PrismaClient, Category } from "@prisma/client";
+import {HttpException} from "../exceptions/HttpException2";
+import {Category} from "@prisma/client";
+import {prisma} from "../database/database";
 
 
-const prisma = new PrismaClient()
 
 export class CategoryService {
     static async getAll() {

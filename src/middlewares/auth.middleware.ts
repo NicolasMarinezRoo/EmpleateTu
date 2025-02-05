@@ -1,6 +1,6 @@
 import { Response, Request, NextFunction } from 'express';
 import jwt from "jsonwebtoken";
-
+import { customJwtPayload } from '../types/express';
 const token_password = process.env.TOKEN_PASSWORD || 'pass'
 
 export function isAuthenticate(req: Request, res: Response, next: NextFunction):any {
@@ -11,7 +11,7 @@ export function isAuthenticate(req: Request, res: Response, next: NextFunction):
 
     try {
         const tokenDecodificado = jwt.verify(token, token_password)
-        req.body.user = tokenDecodificado
+        req.user = tokenDecodificado as customJwtPayload
         next()
     } catch (error) {
         res.status(403).json({ message: "Invalid token" })
@@ -19,7 +19,7 @@ export function isAuthenticate(req: Request, res: Response, next: NextFunction):
 }
 
 export function isAdmin(req: Request, res: Response, next: NextFunction):any {
-    const {role} = req.body.user
+    const {role} = req.user
     try {
         if(role != 'admin') res.status(403).json({ message: "Acces denied" })
         next()

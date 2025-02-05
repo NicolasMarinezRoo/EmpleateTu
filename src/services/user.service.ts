@@ -1,8 +1,7 @@
-import { PrismaClient, User } from "@prisma/client";
-
+import {prisma} from "../database/database";
 import {HttpException} from "../exceptions/HttpException2";
 
-const prisma = new PrismaClient()
+
 
 export class UserService{
     

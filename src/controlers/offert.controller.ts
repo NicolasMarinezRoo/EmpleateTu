@@ -27,7 +27,7 @@ export class OffertController {
     static async create(req: Request, res: Response, next: NextFunction) {
         
         const offertData = req.body
-        const user = req.cookies.token.id
+        const user = req.user.id
         try {
             const newOffert = await OffertService.create(user, offertData)
             res.status(201).json(newOffert)
@@ -79,6 +79,18 @@ export class OffertController {
         try {
             const id = Number.parseInt(req.params.id)
             const offert = await OffertService.getRate(id)
+            res.status(200).json(offert)
+            
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    static async getMyRate(req: Request, res: Response, next: NextFunction) {
+        try {
+            const idOffert = Number.parseInt(req.params.id)
+            const idUser = req.cookies.token.id
+            const offert = await OffertService.getMyRate(idOffert, idUser)
             res.status(200).json(offert)
             
         } catch (error) {

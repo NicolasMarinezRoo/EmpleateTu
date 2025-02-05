@@ -1,11 +1,13 @@
-import { PrismaClient, User } from "@prisma/client";
+import {User} from "@prisma/client";
+import {prisma} from "../database/database";
 import bcypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import {HttpException} from "../exceptions/HttpException2";
 // Alta cohexion bajo acoplamiento
 
-const prisma = new PrismaClient()
+
 const token_password = process.env.TOKEN_PASSWORD || 'pass'
+
 export class AuthService{
     static async register(user:User){
         // Ver si el usuario no existe 

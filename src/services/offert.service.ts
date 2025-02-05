@@ -1,8 +1,8 @@
 import { HttpException } from "../exceptions/HttpException2";
-import { PrismaClient, Offert } from "@prisma/client";
+import { Offert } from "@prisma/client";
+import { prisma } from "../database/database";
 
 
-const prisma = new PrismaClient()
 
 export class OffertService {
 
@@ -27,10 +27,7 @@ export class OffertService {
     }
 
     static async create(idUser: number, offert: Offert) {
-        const findOffert = await prisma.user.findUnique({ where: { id: offert.id } })
-
-        if (findOffert) throw new HttpException(409, 'Offert already exists')
-
+        console.log("creando ", idUser)
         return await prisma.offert.create({
             data: {
                 ...offert,
@@ -56,23 +53,50 @@ export class OffertService {
 
     }
 
-    static async rate(idOffert: number, rate: number, user: number) {
+    static async rate(idOffert: number, value: number, idUser: number) {
         const findOffert = await prisma.offert.findUnique({ where: { id: idOffert } })
         if (!findOffert) throw new HttpException(404, 'Offert not found')
-        return await prisma.rate.create({
-            data: {
-                value: rate,
-                idOffert: idOffert,
-                idUser: user
+
+        if(value < 0 || value > 5) throw new HttpException(400, 'Rate value must be between 0 and 5')
+
+        await prisma.rate.upsert({
+            where: {
+                idUser_idOffert: {
+                    idUser, idOffert
+                }
+            },
+            update: {
+                value
+            },
+            create: {
+                idUser, idOffert, value
             }
         })
     }
 
     static async getRate(idOffert: number) {
+        const raingStats = await prisma.rate.aggregate({
+            where: {idOffert},
+            _avg: {value: true},
+            _count: { value: true }
+        })
+        return {
+            totalRatings: raingStats._count.value,
+            averateRating: raingStats._avg.value?.toFixed(2)
+        }
+    }
+
+    static async getMyRate(idOffert:number, idUser:number){
         const findOffert = await prisma.offert.findUnique({ where: { id: idOffert } })
         if (!findOffert) throw new HttpException(404, 'Offert not found')
-        const rate = await prisma.rate.findMany({ where: { idOffert } })
-        const sum = rate.reduce((acc, curr) => acc + curr.value, 0)
-        return sum / rate.length
+
+        return await prisma.rate.findUnique({
+            where:{
+               idUser_idOffert:{idOffert, idUser}
+            },
+            select:{
+                value:true
+            }
+        })
     }
 }
